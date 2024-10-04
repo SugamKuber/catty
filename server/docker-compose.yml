@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - DB_URI=mongodb://mongo:27017
+    networks:
+      - "web.network"
+
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+    networks:
+      - "web.network"
+    volumes:
+      - mongodata:/data/db
+      - mongodb_config:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+networks:
+  web.network:
+
+volumes:
+  mongodata:
+  mongodb_config:
